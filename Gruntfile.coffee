@@ -33,7 +33,7 @@ module.exports = (grunt) ->
 
       coffeeTest:
         files: ['test/spec/{,*/}*.coffee']
-        tasks: ['coffee:test']
+        tasks: ['coffee:test', 'karma:unit:run']
 
       ls:
         files: ['<%= yeoman.app %>/scripts/{,*/}*.ls']
@@ -42,6 +42,10 @@ module.exports = (grunt) ->
       lsTest:
         files: ['test/spec/{,*/}*.ls']
         tasks: ['lsc:test']
+
+      jsTest:
+        files: ['.tmp/scripts/{,*/}*.js','.tmp/spec/{,*/}*.js']
+        tasks: ['karma:unit:run']
 
 
       recess:
@@ -348,7 +352,8 @@ module.exports = (grunt) ->
       unit:
         configFile: 'karma.conf.js'
         singleRun: false
-        autoWatch: true
+        autoWatch: false
+        background: true
       ci:
         configFile: 'karma.conf.js'
         singleRun: true
@@ -405,7 +410,8 @@ module.exports = (grunt) ->
     'concurrent:test'
     'autoprefixer'
     'connect:test'
-    'karma:unit'
+    'karma:unit:start'
+    'watch'
   ])
 
   grunt.registerTask('build', [

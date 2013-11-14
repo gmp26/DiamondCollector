@@ -23,7 +23,7 @@
     "grunt-open": "~0.2.0",
     "grunt-concurrent": "~0.3.0",
     "grunt-lsc": "~1.0.1",
-    "grunt-karma": "~0.6.0",
+    "grunt-karma": "~0.6.2",
     "grunt-regex-replace": "~0.2.0",
     "grunt-rsync": "~0.2.0",
     "load-grunt-tasks": "~0.1.0",

@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module 'DiamondCollectorApp', []
+angular.module 'DiamondCollectorApp', ['ngRoute']
   .config <[$routeProvider]> ++ ($routeProvider) ->
     $routeProvider.when '/', {
       templateUrl: 'views/main.html'
