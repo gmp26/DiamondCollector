@@ -2,11 +2,144 @@
 
 angular.module 'DiamondCollectorApp'
   .controller 'MainCtrl', <[$scope]> ++ ($scope) ->
-    $scope.awesomeThings =
-      'HTML5 Boilerplate'
-      'AngularJS'
-      'Karma'
-      '[Bootstrap-less or sass]'
-      '[Font-Awesome]'
-      '[Live or CoffeeScript]'
-      '[jQuery]'
+    $scope.plots = []
+    $scope.maxplots = 3
+
+    isFinished = ->
+      return $scope.plots.length >= $scope.maxplots
+    $scope.finished = isFinished!
+
+    $scope.graphType = "cartesian"
+    $scope.inputCartesian = true
+    $scope.inputCircle = false
+    
+    $scope.cartesian = {
+      type: 'cartesian',
+      fx: 'sin(x)'
+    }
+    
+    $scope.circle = {
+      type: 'circle',
+      cx: '1',
+      cy: '1',
+      rx: '2',
+      ry: '2'
+    }
+
+    /**
+     * Listener to reset plots.
+     */
+    $scope.resetPlots = ->
+      $scope.plots = []
+      $scope.finished = isFinished!
+
+    /**
+     * Listener so the user can add new plots to the graph.
+     */
+    $scope.newPlot = ->
+      if $scope.plots.length < $scope.maxplots
+        tmp = _.clone($scope.plots) 
+        switch $scope.graphType
+          case "cartesian"
+            tmp.push(_.clone($scope.cartesian))
+          case "circle"
+            tmp.push(_.clone($scope.circle))
+        $scope.plots = _.clone(tmp)
+      $scope.finished = isFinished!
+
+    /**
+     * Listen for changes to graphType and set input type accordingly.
+     * I feel there should be a better way to do this. Problem is ngShow
+     * requires true / false, and we probably need to support more than two
+     * graph types.
+     * @param n  New graph type
+     * @param o  Old graph type
+     */
+    $scope.$watch 'graphType', (n, o) ->
+      $scope.inputCartesian = false
+      $scope.inputCircle = false
+      switch n
+        case "line"
+          $scope.inputCartesian = true
+        case "circle"
+          $scope.inputCircle = true
+        default
+          $scope.inputCartesian = true
+      return n
+
+  .directive 'jsxGraph', ->
+    return{
+      restrict: 'A',
+      template: '<div id="jsxbox" class="jxgbox" style="width:500px; height:500px;"></div>',
+      link: (scope, element, attrs) -> 
+        board = JXG.JSXGraph.initBoard('jsxbox', {
+          boundingbox: [-10, 10, 10, -10],
+          axis:true,
+          showCopyright: false
+        })
+        plots = []
+
+        /**
+         * Watch function to trigger redraw when the cartesian input
+         * function is updated.
+         */
+        scope.$watch attrs.jsxGraph, (n, o) ->
+          resetGraph!
+
+          count = 0;
+
+          _.each n, (p) ->
+            switch p.type
+              case "cartesian"
+                plots.push(updatecartesian p, count)
+              case "circle"
+                plots.push(updatecircle p, count)
+            count++
+
+        /**
+         * Processes the passed-in string so that JavaScript can understand
+         * it as a maths function.
+         */
+        parsefx = (fx) ->
+          p = false
+          try
+            p = Parser.parse(fx)
+          return p
+
+        /**
+         * Refresh the line
+         */
+        updatecartesian = (p, count) ->
+          fx = parsefx p.fx
+          if fx
+            try
+              return board.create('functiongraph', [(v) -> return fx.evaluate({x:v})])
+          return false
+
+        /**
+         * Refresh the circle
+         * @param circle  Co-ordinates for centre x,y and radial x,y
+         */
+        updatecircle = (circle, count) ->
+          try
+            p_options = {
+              fixed: true,
+              visible: false
+            }
+            p1 = board.create('point', [parseFloat(circle.cx), parseFloat(circle.cy)], p_options)
+            p2 = board.create('point', [parseFloat(circle.rx), parseFloat(circle.ry)], p_options)
+            plots.push(p1, p2)
+            return board.create('circle', [p1, p2])
+          return false;
+
+        /**
+         * Clear all the objects currently on the graph.
+         */
+        resetGraph = ->
+          _.each( plots, (obj) ->
+            if obj
+              try
+                board.removeObject(obj)
+          )
+          plots := []
+    }

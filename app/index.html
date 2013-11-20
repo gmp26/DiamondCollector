@@ -6,16 +6,16 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
-    <meta name="description" content="">
+    <title>Diamond Collector</title>
+    <meta name="description" content="Diamond Collector activity.">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-        <!-- build:css(.tmp) styles/main.css -->
-        <link rel="stylesheet" href="styles/main.css">
-        <link rel="stylesheet" href="styles/jsxgraph.css">
-        <!-- endbuild -->
-</head>
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/jsxgraph.css">
+    <!-- endbuild -->
+  </head>
   <body ng-app="DiamondCollectorApp" id="ng-app">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -39,22 +39,25 @@
        ga('create', 'UA-XXXXX-X');
        ga('send', 'pageview');
     </script>
-    <script src="bower_components/jquery/jquery.js"></script>
+    
+    <!-- JSXGraph from CloudFlare CDN -->
+    <script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.98/jsxgraphcore.js">
+    </script>
+    <script type="text/javascript" src="scripts/libs/parser.js"></script>
+
+    <!-- <script src="bower_components/jquery/jquery.js"></script> -->
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
 
-        <!-- build:js scripts/plugins.js -->
-        <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
-        <!-- endbuild -->
+    <!-- build:js scripts/plugins.js -->
+    <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
+    <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <!-- endbuild -->
-
-        <!-- JSXGraph from CloudFlare CDN -->
-        <script type="text/javascript"
-        	src="//cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.98/jsxgraphcore.js">
-        </script>
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <!-- endbuild -->
 </body>
 </html>
