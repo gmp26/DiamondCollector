@@ -6,21 +6,19 @@ as possible.</p>
   <fieldset>
     <legend>Add new plot</legend>
     <h2>Plot type:</h2>
-    <ul>
-      <li><label>Cartesian:</label><input type="radio" value="cartesian" name="graph-type" ng-model="graphType" /></li>
-      <li><label>Circle:</label><input type="radio" value="circle" name="graph-type" ng-model="graphType" /></li>
+    <ul class="equationType">
+      <li><input type="radio" value="explicit" name="graph-type" ng-model="graphType" /><label>Explicit, y = f(x)</label></li>
+      <li><input type="radio" value="implicit" name="graph-type" ng-model="graphType" /><label>Implicit, ax<sup>2</sup> + bxy + cy<sup>2</sup> + dx + ey + f = 0</label></li>
     </ul>
 
-    <p ng-show="inputCartesian">
-      Cartesian:<br />
-      y = <input type="text" ng-model="cartesian.fx" />
+    <p ng-show="inputExplicit">
+      y = <input type="text" ng-model="explicit.fx" />
     </p>
-    <p ng-show="inputCircle">
-      Circle:<br />
-      Centre: x = <input type="text" ng-model="circle.cx" />
-       y = <input type="text" ng-model="circle.cy" /><br />
-      Edge: x = <input type="text" ng-model="circle.rx" />
-       y = <input type="text" ng-model="circle.ry" />
+    <p ng-show="inputImplicit">
+      Centre: x = <input type="text" ng-model="implicit.cx" />
+       y = <input type="text" ng-model="implicit.cy" /><br />
+      Edge: x = <input type="text" ng-model="implicit.rx" />
+       y = <input type="text" ng-model="implicit.ry" />
     </p>
 
     <button type="button" ng-click="newPlot()" ng-disabled="finished">Add</button>
@@ -31,8 +29,8 @@ as possible.</p>
   <ul>
     <li ng-repeat="plot in plots">
       <ng-switch on="plot.type">
-        <span ng-switch-when="cartesian">Cartesian: y = {{plot.fx}}</span>
-        <span ng-switch-when="circle">Circle: centre ({{plot.cx}}, {{plot.cy}})</span>
+        <span ng-switch-when="explicit">Explicit: y = {{plot.fx}}</span>
+        <span ng-switch-when="implicit">Implicit: centre ({{plot.cx}}, {{plot.cy}})</span>
       </ng-switch>
     </li>
   </ul>

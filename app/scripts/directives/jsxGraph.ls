@@ -13,8 +13,7 @@ angular.module 'DiamondCollectorApp'
       plots = []
 
       /**
-       * Watch function to trigger redraw when the cartesian input
-       * function is updated.
+       * Watch function to trigger redraw when the input equations are changed.
        */
       scope.$watch attrs.jsxGraph, (n, o) ->
         resetGraph!
@@ -22,10 +21,10 @@ angular.module 'DiamondCollectorApp'
         count = 0;
         _.each n, (p) ->
           switch p.type
-            case "cartesian"
-              plots.push(updatecartesian p, count)
-            case "circle"
-              plots.push(updatecircle p, count)
+            case "explicit"
+              plots.push(updateexplicit p, count)
+            case "implicit"
+              plots.push(updateimplicit p, count)
           count++
 
       /**
@@ -38,21 +37,21 @@ angular.module 'DiamondCollectorApp'
           p = Parser.parse(fx)
         return p
 
-      updatecartesian = (p, count) ->
+      updateexplicit = (p, count) ->
         fx = parsefx p.fx
         if fx
           try
             return board.create('functiongraph', [(v) -> return fx.evaluate({x:v})])
         return false
 
-      updatecircle = (circle, count) ->
+      updateimplicit = (p, count) ->
         try
           p_options = {
             fixed: true,
             visible: false
           }
-          p1 = board.create('point', [parseFloat(circle.cx), parseFloat(circle.cy)], p_options)
-          p2 = board.create('point', [parseFloat(circle.rx), parseFloat(circle.ry)], p_options)
+          p1 = board.create('point', [parseFloat(p.cx), parseFloat(p.cy)], p_options)
+          p2 = board.create('point', [parseFloat(p.rx), parseFloat(p.ry)], p_options)
           plots.push(p1, p2)
           return board.create('circle', [p1, p2])
         return false;

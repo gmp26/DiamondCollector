@@ -9,17 +9,17 @@ angular.module 'DiamondCollectorApp'
       return $scope.plots.length >= $scope.maxplots
     $scope.finished = isFinished!
 
-    $scope.graphType = "cartesian"
-    $scope.inputCartesian = true
-    $scope.inputCircle = false
+    $scope.graphType = "explicit"
+    $scope.inputExplicit = true
+    $scope.inputImplicit = false
     
-    $scope.cartesian = {
-      type: 'cartesian',
+    $scope.explicit = {
+      type: 'explicit',
       fx: 'sin(x)'
     }
     
-    $scope.circle = {
-      type: 'circle',
+    $scope.implicit = {
+      type: 'implicit',
       cx: '1',
       cy: '1',
       rx: '2',
@@ -40,10 +40,10 @@ angular.module 'DiamondCollectorApp'
       if $scope.plots.length < $scope.maxplots
         tmp = _.clone($scope.plots) 
         switch $scope.graphType
-          case "cartesian"
-            tmp.push(_.clone($scope.cartesian))
-          case "circle"
-            tmp.push(_.clone($scope.circle))
+          case "explicit"
+            tmp.push(_.clone($scope.explicit))
+          case "implicit"
+            tmp.push(_.clone($scope.implicit))
         $scope.plots = _.clone(tmp)
       $scope.finished = isFinished!
 
@@ -56,13 +56,11 @@ angular.module 'DiamondCollectorApp'
      * @param o  Old graph type
      */
     $scope.$watch 'graphType', (n, o) ->
-      $scope.inputCartesian = false
-      $scope.inputCircle = false
+      $scope.inputExplicit = false
+      $scope.inputImplicit = false
       switch n
-        case "line"
-          $scope.inputCartesian = true
-        case "circle"
-          $scope.inputCircle = true
-        default
-          $scope.inputCartesian = true
+        case "explicit"
+          $scope.inputExplicit = true
+        case "implicit"
+          $scope.inputImplicit = true
       return n
