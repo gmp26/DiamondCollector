@@ -18,14 +18,12 @@ angular.module 'DiamondCollectorApp'
       scope.$watch attrs.jsxGraph, (n, o) ->
         resetGraph!
 
-        count = 0;
         _.each n, (p) ->
           switch p.type
             case "explicit"
-              plots.push(updateexplicit p, count)
+              updateexplicit p
             case "implicit"
-              plots.push(updateimplicit p, count)
-          count++
+              updateimplicit p
 
       /**
        * Processes the passed-in string so that JavaScript can understand
@@ -37,24 +35,44 @@ angular.module 'DiamondCollectorApp'
           p = Parser.parse(fx)
         return p
 
-      updateexplicit = (p, count) ->
+      calcquadratic = (x, p) ->
+        a = parseFloat(p.a)
+        b = parseFloat(p.b)
+        c = parseFloat(p.c)
+        d = parseFloat(p.d)
+        e = parseFloat(p.e)
+        f = 0 - parseFloat(p.f)
+        rootpart = (b*x + e)^2 - 4*c*(a*x^2 + d*x + f)
+        if rootpart >= 0
+          points = []
+          points.push((-(b*x + e) - Math.sqrt(rootpart)) / 2*c)
+          points.push((-(b*x + e) + Math.sqrt(rootpart)) / 2*c)
+          return points  
+        return null
+
+      updateexplicit = (p) ->
         fx = parsefx p.fx
         if fx
           try
-            return board.create('functiongraph', [(v) -> return fx.evaluate({x:v})])
+            plots.push board.create('functiongraph', [(v) -> return fx.evaluate({x:v})])
+            return true
         return false
 
-      updateimplicit = (p, count) ->
+      updateimplicit = (p) ->
         try
-          p_options = {
-            fixed: true,
-            visible: false
-          }
-          p1 = board.create('point', [parseFloat(p.cx), parseFloat(p.cy)], p_options)
-          p2 = board.create('point', [parseFloat(p.rx), parseFloat(p.ry)], p_options)
-          plots.push(p1, p2)
-          return board.create('circle', [p1, p2])
-        return false;
+          px = []
+          pnegy = []
+          pposy = []
+          for x from -10 to 10 by 0.001
+            points = calcquadratic(x, p)
+            if points !== null
+              px.push(x)
+              pnegy.push(points[0])
+              pposy.push(points[1])
+          plots.push board.create('curve', [px, pnegy])
+          plots.push board.create('curve', [px, pposy])
+          return true
+        return false
 
       /**
        * Clear all the objects currently on the graph.
