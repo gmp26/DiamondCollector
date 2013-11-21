@@ -39,25 +39,21 @@
        ga('create', 'UA-XXXXX-X');
        ga('send', 'pageview');
     </script>
-    
-    <!-- JSXGraph from CloudFlare CDN -->
-    <script type="text/javascript"
-        src="//cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.98/jsxgraphcore.js">
-    </script>
-    <script type="text/javascript" src="scripts/libs/parser.js"></script>
 
+    <!-- build:js scripts/plugins.js -->
     <!-- <script src="bower_components/jquery/jquery.js"></script> -->
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
-
-    <!-- build:js scripts/plugins.js -->
     <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/libs/jsxgraphcore.js"></script>
+    <script src="scripts/libs/parser.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/directives/jsxGraph.js"></script>
     <!-- endbuild -->
 </body>
 </html>
