@@ -7,6 +7,7 @@ angular.module 'DiamondCollectorApp'
     link: (scope, element, attrs) ->
       plots = []
       points = []
+      diamonds = []
 
       # initialise the board
       board = JXG.JSXGraph.initBoard('jsxbox', {
@@ -16,19 +17,11 @@ angular.module 'DiamondCollectorApp'
         grid: {gridX: 1, gridY: 1}
       })
 
-      # add target points to the board
-      diamonds = dg.generate 1
-      _.each diamonds, (diamond) ->
-        points.push board.create('point', diamond, {
-          fixed: true,
-          withLabel: false
-        })
-
       /**
        * Watch function to trigger redraw when the input equations are changed.
        */
       scope.$watch attrs.jsxGraph, (n, o) ->
-        resetGraph!
+        resetPlots!
 
         _.each n, (p) ->
           switch p.type
@@ -36,6 +29,25 @@ angular.module 'DiamondCollectorApp'
               updateexplicit p
             case "implicit"
               updateimplicit p
+
+      /**
+       * Watch function to trigger redraw when the level is changed
+       */
+      scope.$watch attrs.level, (n, o) ->
+        adddiamonds n
+
+      /**
+       * Add target points to the board.
+       */
+      adddiamonds = (level) ->
+        resetPoints!
+
+        diamonds := dg.generate level
+        _.each diamonds, (diamond) ->
+          points.push board.create('point', diamond, {
+            fixed: true,
+            withLabel: false
+          })
 
       /**
        * Processes the passed-in string so that JavaScript can understand
@@ -87,13 +99,22 @@ angular.module 'DiamondCollectorApp'
         return false
 
       /**
-       * Clear all the objects currently on the graph.
+       * Clear all the user-generated plots currently on the graph.
        */
-      resetGraph = ->
+      resetPlots = ->
         _.each( plots, (obj) ->
           if obj
             try
               board.removeObject(obj)
         )
         plots := []
+
+      /**
+       * Clear all the system-generated points from the graph.
+       */
+      resetPoints = ->
+        _.each points, (p) ->
+          board.removeObject p
+        points := []
+        diamonds := []
   ]

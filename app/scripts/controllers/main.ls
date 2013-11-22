@@ -2,6 +2,12 @@
 
 angular.module 'DiamondCollectorApp'
   .controller 'MainCtrl', <[$scope]> ++ ($scope) ->
+    $scope.level = 1
+    $scope.levelset = 1
+    $scope.newLevel = ->
+      $scope.resetPlots!
+      $scope.levelset = $scope.level
+
     $scope.plots = []
     $scope.maxplots = 3
 
