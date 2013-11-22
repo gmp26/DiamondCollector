@@ -1,16 +1,28 @@
 'use strict';
 
 angular.module 'DiamondCollectorApp'
-  .directive 'jsxGraph', [ ->
+  .directive 'jsxGraph', [ 'Diamondgenerator', (dg) ->
     template: '<div id="jsxbox" class="jxgbox" style="width:500px; height:500px;"></div>'
     restrict: 'A'
     link: (scope, element, attrs) ->
+      plots = []
+      points = []
+
+      # initialise the board
       board = JXG.JSXGraph.initBoard('jsxbox', {
         boundingbox: [-10, 10, 10, -10],
         axis:true,
-        showCopyright: false
+        showCopyright: false,
+        grid: {gridX: 1, gridY: 1}
       })
-      plots = []
+
+      # add target points to the board
+      diamonds = dg.generate 1
+      _.each diamonds, (diamond) ->
+        points.push board.create('point', diamond, {
+          fixed: true,
+          withLabel: false
+        })
 
       /**
        * Watch function to trigger redraw when the input equations are changed.
