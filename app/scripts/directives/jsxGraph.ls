@@ -102,11 +102,10 @@ angular.module 'DiamondCollectorApp'
        * Clear all the user-generated plots currently on the graph.
        */
       resetPlots = ->
-        _.each( plots, (obj) ->
+        _.each plots, (obj) ->
           if obj
             try
               board.removeObject(obj)
-        )
         plots := []
 
       /**
@@ -114,7 +113,8 @@ angular.module 'DiamondCollectorApp'
        */
       resetPoints = ->
         _.each points, (p) ->
-          board.removeObject p
+          try
+            board.removeObject p
         points := []
         diamonds := []
   ]

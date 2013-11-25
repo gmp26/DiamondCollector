@@ -40,7 +40,7 @@ angular.module('DiamondCollectorApp')
       return points
 
     this.resetPoints = ->
-      points = []
+      points := []
 
     /**
      * Make points on a line y = ax + b
