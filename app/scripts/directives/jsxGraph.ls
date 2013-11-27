@@ -6,6 +6,7 @@ angular.module 'DiamondCollectorApp'
     restrict: 'A'
     link: (scope, element, attrs) ->
       plots = []
+      plots_params = []
       points = []
 
       # initialise the board
@@ -20,7 +21,10 @@ angular.module 'DiamondCollectorApp'
        * Watch function to trigger redraw when the input equations are changed.
        */
       scope.$watch attrs.jsxGraph, (n, o) ->
+        plots_params := _.clone n
+
         resetPlots!
+        clearHitPoints!
 
         _.each n, (p) ->
           switch p.type
@@ -28,6 +32,8 @@ angular.module 'DiamondCollectorApp'
               updateexplicit p
             case "implicit"
               updateimplicit p
+
+        setHitPoints!
 
       /**
        * Watch function to trigger redraw when the level is changed
@@ -97,6 +103,35 @@ angular.module 'DiamondCollectorApp'
           plots.push board.create('curve', [px, pposy])
           return true
         return false
+
+      /**
+       * Hightlight the points which are on a user-entered curve
+       */
+      setHitPoints = ->
+        diamonds = dg.getPoints! # diamonds contains actual co-ordinates
+
+        # check whether the point is within an acceptable distance of each equation
+        _.each plots_params, (p) -> # for each plot, go through all the diamonds
+          count = 0
+          switch p.type
+            case "explicit"
+              fx = parsefx p.fx
+              _.each diamonds, (diamond) ->
+                yfx = fx.evaluate({x:diamond[0]})
+                if diamond[1] - 0.1 <= yfx <= diamond[1] + 0.1
+                  points[count].strokeColor 'green'
+                  points[count].fillColor 'green'
+                count++
+            case "implicit"
+              console.info "implicit"
+
+      /**
+       * Clear the highlighting on all points
+       */
+      clearHitPoints = ->
+        _.each points, (point) ->
+          point.strokeColor 'red'
+          point.fillColor 'red'
 
       /**
        * Clear all the user-generated plots currently on the graph.
