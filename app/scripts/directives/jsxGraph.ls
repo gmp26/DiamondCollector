@@ -7,7 +7,6 @@ angular.module 'DiamondCollectorApp'
     link: (scope, element, attrs) ->
       plots = []
       points = []
-      diamonds = []
 
       # initialise the board
       board = JXG.JSXGraph.initBoard('jsxbox', {
@@ -42,7 +41,8 @@ angular.module 'DiamondCollectorApp'
       adddiamonds = (level) ->
         resetPoints!
 
-        diamonds := dg.generate level
+        dg.generate level
+        diamonds = dg.getPoints!
         _.each diamonds, (diamond) ->
           points.push board.create('point', diamond, {
             fixed: true,
@@ -116,5 +116,5 @@ angular.module 'DiamondCollectorApp'
           try
             board.removeObject p
         points := []
-        diamonds := []
+        dg.resetPoints!
   ]

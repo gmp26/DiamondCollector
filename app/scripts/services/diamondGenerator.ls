@@ -34,7 +34,6 @@ angular.module('DiamondCollectorApp')
           case "circle"
             this.makeCircle!
       this.makeNoise level
-      return points
 
     this.getPoints = ->
       return points
@@ -68,7 +67,7 @@ angular.module('DiamondCollectorApp')
      * unlikely to worry about with non-integer values.
      */
     this.makeCircle = ->
-      numPoints = 30
+      numPoints = 20
 
       a = this.getRandom -5 5
       b = this.getRandom -5 5
