@@ -118,12 +118,20 @@ angular.module 'DiamondCollectorApp'
               fx = parsefx p.fx
               _.each diamonds, (diamond) ->
                 yfx = fx.evaluate({x:diamond[0]})
-                if diamond[1] - 0.1 <= yfx <= diamond[1] + 0.1
-                  points[count].strokeColor 'green'
-                  points[count].fillColor 'green'
+                colourHitPoint diamond[1], yfx, points[count]
                 count++
             case "implicit"
-              console.info "implicit"
+              _.each diamonds, (diamond) ->
+                yfx = calcquadratic diamond[0], p
+                if yfx !== null
+                  _.each yfx, (yfxa) ->
+                    colourHitPoint diamond[1], yfxa, points[count]
+                count++
+
+      colourHitPoint = (diamondx, yfx, point) ->
+        if diamondx - 0.1 <= yfx <= diamondx + 0.1
+          point.strokeColor 'green'
+          point.fillColor 'green'
 
       /**
        * Clear the highlighting on all points

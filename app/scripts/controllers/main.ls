@@ -15,13 +15,13 @@ angular.module 'DiamondCollectorApp'
       return $scope.plots.length >= $scope.maxplots
     $scope.finished = isFinished!
 
-    $scope.graphType = "implicit"
+    $scope.graphType = "explicit"
     $scope.inputExplicit = true
     $scope.inputImplicit = false
     
     $scope.explicit = {
       type: 'explicit',
-      fx: 'sin(x)'
+      fx: '2*x+1'
     }
 
     /**
