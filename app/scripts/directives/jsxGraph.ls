@@ -109,6 +109,7 @@ angular.module 'DiamondCollectorApp'
        */
       setHitPoints = ->
         diamonds = dg.getPoints! # diamonds contains actual co-ordinates
+        hits = []
 
         # check whether the point is within an acceptable distance of each equation
         _.each plots_params, (p) -> # for each plot, go through all the diamonds
@@ -118,20 +119,25 @@ angular.module 'DiamondCollectorApp'
               fx = parsefx p.fx
               _.each diamonds, (diamond) ->
                 yfx = fx.evaluate({x:diamond[0]})
-                colourHitPoint diamond[1], yfx, points[count]
+                colourHitPoint diamond[1], yfx, count, hits
                 count++
             case "implicit"
               _.each diamonds, (diamond) ->
                 yfx = calcquadratic diamond[0], p
                 if yfx !== null
                   _.each yfx, (yfxa) ->
-                    colourHitPoint diamond[1], yfxa, points[count]
+                    colourHitPoint diamond[1], yfxa, count, hits
                 count++
+          scope.numFound = hits.length
 
-      colourHitPoint = (diamondx, yfx, point) ->
+      colourHitPoint = (diamondx, yfx, count, hits) ->
         if diamondx - 0.1 <= yfx <= diamondx + 0.1
-          point.strokeColor 'green'
-          point.fillColor 'green'
+          points[count].strokeColor 'green'
+          points[count].fillColor 'green'
+          if _.indexOf(hits, count) == -1
+            hits.push count
+          return true
+        return false
 
       /**
        * Clear the highlighting on all points

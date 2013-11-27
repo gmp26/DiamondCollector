@@ -11,6 +11,8 @@ angular.module 'DiamondCollectorApp'
     $scope.plots = []
     $scope.maxplots = 3
 
+    $scope.numFound = 0
+
     isFinished = ->
       return $scope.plots.length >= $scope.maxplots
     $scope.finished = isFinished!
