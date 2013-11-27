@@ -143,6 +143,7 @@ module.exports = (grunt) ->
     jshint:
       options:
         jshintrc: '.jshintrc'
+        ignores: ['<%= yeoman.app %>/scripts/libs/parser.js']
 
       all: [
         'Gruntfile.js'

@@ -1,9 +1,60 @@
-<div class="hero-unit">
-  <h1>'Allo, 'Allo!</h1>
-  <p>You now have</p>
-  <ul>
-      <li ng-repeat="thing in awesomeThings">{{thing}}</li>
-  </ul>
-  <p><i class="icon-star icon-spin"></i> installed.</p>
-  <h3>Enjoy coding! - Yeoman</h3>
-</div>
+<h1>Diamond Collector</h1>
+<p>Enter up to three graph equations to hit as many of the marked points
+as possible.</p>
+
+<section ng-controller="MainCtrl">
+  <fieldset>
+    <legend>Select difficulty</legend>
+    <p>
+      <select ng-model=level>
+        <option value="1">Level 1</option>
+        <option value="2">Level 2</option>
+        <option value="3">Level 3</option>
+      </select>
+    </p>
+    <p><button type="button" ng-click="newLevel()">Go</button></p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Add new plot</legend>
+    <ul class="equationType">
+      <li><input type="radio" value="explicit" name="graph-type" ng-model="graphType" /><label>Explicit, y = f(x)</label></li>
+      <li><input type="radio" value="implicit" name="graph-type" ng-model="graphType" /><label>Implicit, ax<sup>2</sup> + bxy + cy<sup>2</sup> + dx + ey = f</label></li>
+    </ul>
+
+    <p ng-show="inputExplicit">
+      y = <input type="text" ng-model="explicit.fx" />
+    </p>
+    <p ng-show="inputImplicit">
+      <input type="text" ng-model="implicit.a" class="numeric" /> x<sup>2</sup> +
+      <input type="text" ng-model="implicit.b" class="numeric" /> xy +
+      <input type="text" ng-model="implicit.c" class="numeric" /> y<sup>2</sup> +
+      <input type="text" ng-model="implicit.d" class="numeric" /> x +
+      <input type="text" ng-model="implicit.e" class="numeric" /> y =
+      <input type="text" ng-model="implicit.f" class="numeric" />
+    </p>
+
+    <p><button type="button" ng-click="newPlot()" ng-disabled="finished">Add</button></p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Plot equations</legend>
+    <p>Plots with the following equations have been added to the graph:</p>
+    <ul>
+      <li ng-repeat="plot in plots">
+        <ng-switch on="plot.type">
+          <span ng-switch-when="explicit">Explicit: y = {{plot.fx}}</span>
+          <span ng-switch-when="implicit">Implicit: {{plot.eqstr}}</span>
+        </ng-switch>
+      </li>
+    </ul>
+    <p><button type="button" ng-click="resetPlots()">Reset</button></p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Graph</legend>
+    <div jsx-graph="plots" level="levelset"></div>
+  </fieldset>
+  
+  <p>You have collected {{numFound}} diamond<span ng-if="numFound != 1">s</span>.</p>
+</section>
