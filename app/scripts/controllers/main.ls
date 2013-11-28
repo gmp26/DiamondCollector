@@ -52,6 +52,7 @@ angular.module 'DiamondCollectorApp'
     $scope.resetPlots = ->
       $scope.plots = []
       $scope.finished = isFinished!
+      $scope.numFound = 0
 
     /**
      * Listener so the user can add new plots to the graph.
