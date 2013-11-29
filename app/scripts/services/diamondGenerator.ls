@@ -65,8 +65,8 @@ angular.module('DiamondCollectorApp')
      * Make points on a line y = ax + b
      */
     this.makeLine = ->
-      a = this.getRandom -5 5
-      b = this.getRandom!
+      a = this.getRandom! # gradient
+      b = this.getRandom -9 9 # offset
       xused = []
 
       plots.push ['line', 'y = '+a+'x + '+b]

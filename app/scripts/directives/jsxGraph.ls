@@ -121,7 +121,7 @@ angular.module 'DiamondCollectorApp'
                 yfx = fx.evaluate({x:diamond[0]})
                 colourHitPoint diamond[1], yfx, count, hits
                 count++
-            case "implicit"
+            case "implicit" # note calculating hit points for circles seems slow at the moment
               _.each diamonds, (diamond) ->
                 yfx = calcquadratic diamond[0], p
                 if yfx !== null
