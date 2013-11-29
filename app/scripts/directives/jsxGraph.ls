@@ -2,9 +2,12 @@
 
 angular.module 'DiamondCollectorApp'
   .directive 'jsxGraph', [ 'Diamondgenerator', (dg) ->
-    template: '<div id="jsxbox" class="jxgbox" style="width:500px; height:500px;"></div>'
+    template: '<div id="jsxbox" class="jxgbox" style="width:100%; max-width:500px;"></div>'
     restrict: 'A'
     link: (scope, element, attrs) ->
+      # set jxgbox height
+      $('#jsxbox').height($('#jsxbox').width!)
+
       plots = []
       plots_params = []
       points = []
@@ -121,7 +124,7 @@ angular.module 'DiamondCollectorApp'
                 yfx = fx.evaluate({x:diamond[0]})
                 colourHitPoint diamond[1], yfx, count, hits
                 count++
-            case "implicit"
+            case "implicit" # note calculating hit points for circles seems slow at the moment
               _.each diamonds, (diamond) ->
                 yfx = calcquadratic diamond[0], p
                 if yfx !== null
