@@ -2,9 +2,12 @@
 
 angular.module 'DiamondCollectorApp'
   .directive 'jsxGraph', [ 'Diamondgenerator', (dg) ->
-    template: '<div id="jsxbox" class="jxgbox" style="width:500px; height:500px;"></div>'
+    template: '<div id="jsxbox" class="jxgbox" style="width:100%; max-width:500px;"></div>'
     restrict: 'A'
     link: (scope, element, attrs) ->
+      # set jxgbox height
+      $('#jsxbox').height($('#jsxbox').width!)
+
       plots = []
       plots_params = []
       points = []
