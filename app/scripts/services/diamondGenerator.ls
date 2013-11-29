@@ -25,8 +25,31 @@ angular.module('DiamondCollectorApp')
     # Stores the generated point coordinates
     points = []
 
+    this.getPoints = ->
+      return points
+
+    this.resetPoints = ->
+      points := []
+
+    # Stores the generated plots
+    plots = []
+
+    this.getPlots = ->
+      return plots
+
+    this.resetPlots = ->
+      plots := []
+
+    # Default range bound for random number generation
+    rangelimit = 10
+
+    # The number of points to draw on different plot types
+    numPointsLine = 10
+    numPointsCircle = 20
+
     this.generate = (level) ->
       this.resetPoints!
+      this.resetPlots!
       for type in levels[level][1]
         switch type
           case "line"
@@ -35,27 +58,24 @@ angular.module('DiamondCollectorApp')
             this.makeCircle!
       this.makeNoise level
 
-    this.getPoints = ->
-      return points
-
-    this.resetPoints = ->
-      points := []
+      # for debugging
+      #console.info plots
 
     /**
      * Make points on a line y = ax + b
      */
     this.makeLine = ->
-      numPoints = 10
-
-      a = this.getRandom -2.5 2.5
+      a = this.getRandom -5 5
       b = this.getRandom!
       xused = []
 
-      for i from 1 to numPoints
+      plots.push ['line', 'y = '+a+'x + '+b]
+
+      for i from 1 to numPointsLine
         y = 11
         x = 0
-        while Math.abs(y) > 10 || xused.indexOf(x) != -1 # out of range or used
-          x = this.getRandom!
+        while Math.abs(y) > rangelimit || xused.indexOf(x) != -1 # out of range or used
+          x = this.getRandom -rangelimit, rangelimit, false
           y = a*x + b
         xused.push x
         points.push [x, y]
@@ -67,17 +87,17 @@ angular.module('DiamondCollectorApp')
      * unlikely to worry about with non-integer values.
      */
     this.makeCircle = ->
-      numPoints = 20
+      a = this.getRandom!
+      b = this.getRandom!
+      c = this.getRandom 1 100 # radius between 1 and 10
 
-      a = this.getRandom -5 5
-      b = this.getRandom -5 5
-      c = this.getRandom 1 25 # radius between 1 and 5
-      
-      for i from 1 to numPoints
+      plots.push ['circle', '(x + '+a+')^2 + (y + '+b+') = '+c]
+
+      for i from 1 to numPointsCircle
         y = 11
         x = 0
-        while Math.abs(y) > 10 || c - (x + a)^2 < 0 # out of range or invalid x value
-          x = this.getRandom!
+        while Math.abs(y) > rangelimit || c - (x + a)^2 < 0 # out of range or invalid x value
+          x = this.getRandom -rangelimit, rangelimit, false
           if c - (x + a)^2 >= 0
             y = Math.sqrt(c - (x + a)^2) - b
 
@@ -96,7 +116,7 @@ angular.module('DiamondCollectorApp')
     /**
      * Generates a signed random number with the properties
      * rangemin <= Math.abs(number) <= rangemax
-     * This allow random numbers in the range e.g. -10 to 2, 2 to 10.
+     * This allows random numbers in the range e.g. -10 to 2, 2 to 10.
      * getRandom() can only return a single continuous range e.g. -10 to 10. 
      */
     this.getRandomSigned = (rangemin, rangemax, integer) ->
@@ -114,9 +134,9 @@ angular.module('DiamondCollectorApp')
         throw "Error: trying to generate a random number in range where range minimum is greater than range maximum. Minimum should be less than maximum."
         return 0
 
-      if typeof rangemin == 'undefined' then rangemin = -10
-      if typeof rangemax == 'undefined' then rangemax = 10
-      if typeof integer == 'undefined' then integer = false # default to returning float values
+      if typeof rangemin == 'undefined' then rangemin = -rangelimit
+      if typeof rangemax == 'undefined' then rangemax = rangelimit
+      if typeof integer == 'undefined' then integer = true # default to returning integer values
 
       num = Math.random()*(rangemax - rangemin) + rangemin
 
