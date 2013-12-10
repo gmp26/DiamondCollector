@@ -26,6 +26,11 @@ angular.module 'DiamondCollectorApp'
       fx: '2*x+1'
     }
 
+    $scope.mqLatex = ''
+    $scope.$watch 'mqLatex', (n, o) ->
+      console.info n # placeholder action; needs to feed in to equation entry functions.
+      return n
+
     /**
      * Allows generation of equations in the form:
      *   ax^2 + bxy + cy^2 + dx + ey = f
