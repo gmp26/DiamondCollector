@@ -14,6 +14,7 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/jsxgraph.css">
+    <link rel="stylesheet" href="styles/mathquill.css">
     <!-- endbuild -->
   </head>
   <body ng-app="DiamondCollectorApp" id="ng-app">
@@ -25,6 +26,11 @@
       <script src="bower_components/es5-shim/es5-shim.js"></script>
       <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
+
+    <!-- MathQuill -->
+    <section class="mq">
+        <p>Enter equation: <span class="mathquill-editable js_mq_editable js_keyup_listener"></span></p>
+    </section>
 
     <!-- Add your site or application content here -->
     <div class="container" ng-view=""></div>
@@ -55,6 +61,8 @@
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/directives/jsxGraph.js"></script>
     <script src="scripts/services/diamondGenerator.js"></script>
+    <script src="scripts/libs/mathquill.min.js"></script>
+    <script src="scripts/libs/mathquill.ctrl.js"></script>
     <!-- endbuild -->
 </body>
 </html>
